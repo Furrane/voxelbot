@@ -42,12 +42,11 @@ def use(slot, chest = False):
         pyautogui.click()
 
 def sell(slot):
-    pyautogui.moveTo(SLOTS[slot][0], SLOTS[slot][1])
-    time.sleep(.1)
-    pyautogui.click()
-    pyautogui.moveRel(0.084*DIM[0], 0.198*DIM[1])
-    time.sleep(.1)
-    pyautogui.click()
+    pyautogui.click(SLOTS[slot][0], SLOTS[slot][1])
+    time.sleep(.4)
+    pos= pyautogui.locateCenterOnScreen('sell_button.png', region=(SLOTS[slot][0], SLOTS[slot][1], DIM[0]/4, DIM[1]/2), grayscale=True)
+    print(pos)
+    pyautogui.click(pos[0],pos[1])
 
 def equip(slot):
     pyautogui.moveTo(SLOTS[slot][0], SLOTS[slot][1])
@@ -76,10 +75,16 @@ while running :
         open_chest(int(i[0]), int(i[1]))
 
     elif userinput == '2':
+
+        pyautogui.alert('Put the mouse pointer over the "SELL" button then press "Enter"')
+        pos = pyautogui.position()
+        pyautogui.screenshot('sell_button.png', region=(pos[0],pos[1], 100,50))
+
         i = pyautogui.prompt(text='Write the starting and end slot (inclusive) of the items you want to sell, EVERYTHING in between will be sold !').split()
         start, end = int(i[0]), int(i[1])
         for slot in range(start, end+1):
             sell(slot)
+            time.sleep(.1)
 
     else :
         running = False
